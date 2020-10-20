@@ -31,9 +31,8 @@ plt.legend(['target = +1','target = -1'], loc='lower right')
 plt.savefig('./data_visualisation.pdf')
 plt.close()
 
-model = LogisticRegression(penalty='none', solver='lbfgs')
-logistic_model = model.fit(X, y)
-print(f'intercept is : {model.intercept_} \n slope is : {model.coef_}')
+logistic_model = LogisticRegression(penalty='none', solver='lbfgs').fit(X, y)
+print(f'intercept is : {logistic_model.intercept_} \n slope is : {logistic_model.coef_}')
 
 # get decision boundary line by rearranging thetaTx = 0
 # theta0 = logistic_model.intercept_
@@ -63,7 +62,7 @@ plt.plot(boundary_x, boundary_y, linewidth=2)
 plt.xlabel('X_1')
 plt.ylabel('X_2')
 plt.legend(['decision boundary','target = +1','target = -1', 'predicted = +1', 'predicted = -1'], loc='lower right')
-plt.savefig('./vis_with_preds.pdf')
+#plt.savefig('./vis_with_preds.pdf')
 plt.close()
 
 model1 = LinearSVC(C=0.001).fit(X,y)
@@ -145,6 +144,34 @@ plt.plot(bound3_x, bound3_y, linewidth=2)
 plt.xlabel('X_1')
 plt.ylabel('X_2')
 plt.legend(['decision boundary (C=1000)','target = +1','target = -1', 'predicted = +1', 'predicted = -1'], loc='lower right')
-plt.savefig('./SVM_C=1000.pdf')
+#plt.savefig('./SVM_C=1000.pdf')
+#plt.show()
+plt.close()
+
+# feature engineering 
+
+X3 = df.iloc[:,0] ** 2
+X4 = df.iloc[:,1] ** 2
+X = np.column_stack((X1,X2,X3,X4))
+
+logistic_model2 = LogisticRegression(penalty='none', solver='lbfgs').fit(X, y)
+print(f'intercept is : {logistic_model2.intercept_} \n slope is : {logistic_model2.coef_}')
+y_feat_eng = logistic_model2.predict(X)
+#split up for plotting
+pred_df = pd.DataFrame(columns=['X1','X2','y_pred'])
+pred_df['X1'] = X1
+pred_df['X2'] = X2
+pred_df['y_pred'] = y_feat_eng
+pred_pos = pred_df[pred_df['y_pred'] == 1]
+pred_neg = pred_df[pred_df['y_pred'] == -1]
+#plot training, predictions and decision boundary
+plt.scatter(df_pos.iloc[:,0], df_pos.iloc[:,1], marker='o', color='b', s=18)
+plt.scatter(df_neg.iloc[:,0], df_neg.iloc[:,1], marker='+', color='purple', s=18)
+plt.scatter(pred_pos.iloc[:,0], pred_pos.iloc[:,1], marker='h', color='darkorange', s=9)
+plt.scatter(pred_neg.iloc[:,0], pred_neg.iloc[:,1], marker='v', color='yellow', s=9)
+plt.xlabel('X_1')
+plt.ylabel('X_2')
+plt.legend(['target = +1','target = -1', 'predicted = +1', 'predicted = -1'], loc='lower right')
+plt.savefig('./feature_eng.pdf')
 plt.show()
 plt.close()
