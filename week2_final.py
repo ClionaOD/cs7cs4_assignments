@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 
+from statistics import mode
+
 """dataset_url = 'https://www.scss.tcd.ie/Doug.Leith/CSU44061/week2.php'
 dataset = requests.get(dataset_url)
 with open('./week_2_dataset.txt','w') as f:
@@ -92,3 +94,26 @@ logistic_model2 = LogisticRegression(penalty='none', solver='lbfgs').fit(X, y)
 print(f'==== \n logistic regression results after feature engineering \n intercept is : {logistic_model2.intercept_} \n feature parameters : {logistic_model2.coef_}')
 # (ii) predict target values
 y_feat_eng = logistic_model2.predict(X)
+
+# (iii) compare the performance against a reasonable baseline predictor
+    # set baseline as model that always predicts most common class
+
+def baseline(X,y):
+    most_common = mode(y)
+    pred_df = pd.DataFrame(X)
+    pred_df['preds'] = most_common
+    return pred_df
+
+base_df = baseline(X,y)
+base_df['true'] = y
+
+feat_eng_df = pd.DataFrame(X)
+feat_eng_df['preds'] = y_feat_eng
+feat_eng_df['true'] = y
+
+performance_baseline = len(np.where(base_df['preds'] != base_df['true'])[0])
+print(f'Baseline model number of incorrect predictions is {performance_baseline}')
+
+engineered_baseline = len(np.where(feat_eng_df['preds'] != feat_eng_df['true'])[0])
+print(f'Logistic regression model (with feature engineering) number of incorrect predictions is {engineered_baseline}')
+
