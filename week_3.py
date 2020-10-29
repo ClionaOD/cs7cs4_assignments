@@ -6,6 +6,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn import linear_model
+from sklearn.model_selection import cross_val_score, KFold
+from sklearn.metrics import mean_squared_error
 
 """dataset_url = 'https://www.scss.tcd.ie/Doug.Leith/CSU44061/week3.php'
 dataset = requests.get(dataset_url)
@@ -27,7 +29,7 @@ ax.set_xlabel('input 1')
 ax.set_ylabel('input 2')
 ax.set_zlabel('target value')
 ax.view_init(elev=15., azim=-55.)
-plt.savefig('./data_vis.pdf')
+#plt.savefig('./data_vis.pdf')
 plt.close()
 
 # (i)(b) 
@@ -102,11 +104,39 @@ for a in alphas:
     
     plt.tight_layout()
     save_path = f'./Ridge_plot_alpha={a}.pdf'
-    plt.savefig(save_path)
-    plt.show()
+    #plt.savefig(save_path)
+    #plt.show()
     plt.close()
-    
 
+#(ii)
+#(a)
+a = 0.5 #C=1 therefore alpha=1/2
+lasso = linear_model.Lasso(alpha=a)
+print(f'====== \n Lasso parameters for alpha={a}: \n intercept: {lasso.intercept_} \n slope: {lasso.coef_}')
+
+folds = [5, 2, 10, 25, 50, 100]
+cv_df = pd.DataFrame(index=['mean error', 'variance'], columns=folds)
+
+for k in folds:
+    kf = KFold(n_splits=k)
+
+    errors = []
+    for i in range(5):
+        for train, test in kf.split(Xpoly):
+            model =  lasso.fit(Xpoly[train], y[train])
+            ypred = model.predict(Xpoly[test])
+            
+            error = mean_squared_error(y[test],ypred)
+            errors.append(error)
+    
+    mean_err = np.mean(np.array(errors))
+    std = np.std(np.array(errors))
+    
+    cv_df.loc['mean error',k] = mean_err
+    cv_df.loc['variance',k] = std
+    print(f'===== \n {k}-fold Cross-Val results: \n mean error = {mean_err} \n standard deviation = {std}')
+
+#TODO: plot the variance and mean
 
 
 
