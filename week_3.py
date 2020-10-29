@@ -35,7 +35,7 @@ Xpoly = PolynomialFeatures(degree=5).fit_transform(X)
 # X.shape = (199,2)
 # Xpoly.shape = (199,21)
 
-Cs = [.0001,.001,1]
+alphas = [.0001,.001,1]
 
 #generate grid of feature values
     #range of X is (-1,1) therefore extend grid beyond this.
@@ -47,16 +47,16 @@ for i in grid:
 Xtest = np.array(Xtest)
 Xtest_poly = PolynomialFeatures(degree=5).fit_transform(Xtest)
 
-for C in Cs:
-    lasso = linear_model.Lasso(alpha=C).fit(Xpoly,y)
-    print(f'====== \n parameters for C={C}: \n intercept: {lasso.intercept_} \n slope: {lasso.coef_}')
+for a in alphas:
+    lasso = linear_model.Lasso(alpha=a).fit(Xpoly,y)
+    print(f'====== \n Lasso parameters for alpha={a}: \n intercept: {lasso.intercept_} \n slope: {lasso.coef_}')
 
-    preds = lasso.predict(Xtest_poly)
+    lasso_preds = lasso.predict(Xtest_poly)
 
     fig = plt.figure()
     ax = fig.add_subplot(111,projection='3d')
 
-    surf = ax.plot_trisurf(Xtest[:,0],Xtest[:,1],preds, color='palegoldenrod',label='predictions')
+    surf = ax.plot_trisurf(Xtest[:,0],Xtest[:,1],lasso_preds, color='palegoldenrod',label='predictions')
     surf._edgecolors2d = surf._edgecolors3d
     surf._facecolors2d = surf._facecolors3d
     
@@ -68,10 +68,40 @@ for C in Cs:
 
     ax.view_init(elev=15., azim=-55.)
 
-    ax.set_title(f'C = {C}')
+    ax.set_title(f'Lasso: 1/2C = {a}')
     ax.legend()
     
-    save_path = f'./Lasso_plot_C={C}.pdf'
+    plt.tight_layout()
+    save_path = f'./Lasso_plot_alpha={a}.pdf'
+    #plt.savefig(save_path)
+    #plt.show()
+    plt.close()
+
+    ridge = linear_model.Ridge(alpha=a).fit(Xpoly,y)
+    print(f'====== \n Ridge parameters for alpha={a}: \n intercept: {ridge.intercept_} \n slope: {ridge.coef_}')
+
+    ridge_preds = ridge.predict(Xtest_poly)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111,projection='3d')
+
+    surf = ax.plot_trisurf(Xtest[:,0],Xtest[:,1],ridge_preds, color='palegoldenrod',label='predictions')
+    surf._edgecolors2d = surf._edgecolors3d
+    surf._facecolors2d = surf._facecolors3d
+    
+    scat = ax.scatter(X1,X2,y, color='r',label='training points')
+
+    ax.set_xlabel('X1')
+    ax.set_ylabel('X2')
+    ax.set_zlabel('y')
+
+    ax.view_init(elev=15., azim=-55.)
+
+    ax.set_title(f'Ridge: 1/2C = {a}')
+    ax.legend()
+    
+    plt.tight_layout()
+    save_path = f'./Ridge_plot_alpha={a}.pdf'
     plt.savefig(save_path)
     plt.show()
     plt.close()
