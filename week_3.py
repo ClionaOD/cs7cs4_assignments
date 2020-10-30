@@ -206,7 +206,7 @@ ax.errorbar(np.array(a_ridge_wide.columns), np.array(a_ridge_wide.loc['mean erro
 ax.set_xlabel('value for alpha (1/2C)')
 ax.set_ylabel('mean prediction error')
 ax.set_title('ridge cross val over wide range of alpha')
-#plt.savefig('./cv_ridge_1.pdf')
+plt.savefig('./cv_ridge_1.pdf')
 #plt.show()
 plt.close()
 
@@ -219,7 +219,7 @@ ax.errorbar(np.array(a_ridge_narrow.columns), np.array(a_ridge_narrow.loc['mean 
 ax.set_xlabel('value for alpha (1/2C)')
 ax.set_ylabel('mean prediction error')
 ax.set_title('ridge cross val over narrow range of alpha')
-#plt.savefig('./cv_ridge_1.pdf')
+plt.savefig('./cv_ridge_2.pdf')
 #plt.show()
 plt.close()
 
