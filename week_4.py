@@ -202,7 +202,7 @@ def evaluate(X_train, y_train, X_test, y_test, y_logistic, y_kNN, poly_degree=2,
 
 if __name__ == "__main__":
     for f in os.listdir('.'):
-        if '.txt' in f:
+        if 'dataset1.txt' in f:
             title = f.split('_')[1].split('.')[0] 
 
             #(i) dataset id : 25-50-25-0  
@@ -229,16 +229,14 @@ if __name__ == "__main__":
             C_CV_results = CV_C(X_train_poly, y_train, C_Range)
             plot_CV(C_CV_results, 
                 xlabel='C', 
-                title='cross-val results: LogisticRegression C (wide range)',
-                save_path=f'./{title}_crossVal_C_wide.pdf'
+                title='cross-val results: LogisticRegression C (wide range)'
             )
 
             C_Range = np.linspace(1,2)
             C_CV_results = CV_C(X_train_poly, y_train, C_Range)
             plot_CV(C_CV_results, 
                 xlabel='C', 
-                title='cross-val results: LogisticRegression C (narrow range)',
-                save_path=f'./{title}_crossVal_C_narrow.pdf'
+                title='cross-val results: LogisticRegression C (narrow range)'
             )
             # from the plots, C=1.6 was chosen
 
@@ -248,7 +246,7 @@ if __name__ == "__main__":
             
             X_test_poly = PolynomialFeatures(degree=2).fit_transform(X_test)
             ypreds = model.predict(X_test_poly)
-            plot_train_predict(data, get_pred_df(X_test, ypreds), save_path=f'{title}_logistic_datapreds.pdf')
+            plot_train_predict(data, get_pred_df(X_test, ypreds))
 
             # (b) perform kNN Classification
             k_range = np.linspace(1,15)
@@ -271,11 +269,11 @@ if __name__ == "__main__":
 
             kNN_model.fit(X_train_poly, y_train)
             kNN_preds_poly = kNN_model.predict(X_test_poly)
-            plot_train_predict(data, get_pred_df(X_test,kNN_preds_poly), save_path=f'{title}_kNN_datavis_poly.pdf')
+            plot_train_predict(data, get_pred_df(X_test,kNN_preds_poly))
 
             kNN_model.fit(X_train, y_train)
             kNN_preds = kNN_model.predict(X_test)
-            plot_train_predict(data, get_pred_df(X_test,kNN_preds), save_path=f'{title}_kNN_datavis.pdf')
+            plot_train_predict(data, get_pred_df(X_test,kNN_preds))
 
             # (c) calculate confusion matrices for these models and for dummy classifier
-            evaluate(X_train, y_train, X_test, y_test, ypreds, kNN_preds, save_path=f'{title}_ROC.pdf')
+            evaluate(X_train, y_train, X_test, y_test, ypreds, kNN_preds)
