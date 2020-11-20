@@ -73,3 +73,7 @@
  [[-1.38602096e-11]
  [ 9.99000999e-01]
  [-1.38602096e-11]]
+
+Mean square error for kNN with Gaussian Kernel = 1.028269779658132
+Mean square error for kernalised Ridge = 1.1631945029254551
+Mean square error for kernalised Ridge = 11.430889363316494

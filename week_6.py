@@ -9,6 +9,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.model_selection import KFold, train_test_split
 from sklearn.metrics import mean_squared_error
+from sklearn.dummy import DummyRegressor
 
 """dataset_url = 'https://www.scss.tcd.ie/Doug.Leith/CSU44061/week5.php'
 dataset = requests.get(dataset_url)
@@ -311,6 +312,18 @@ if __name__ == "__main__":
     plt.savefig('./model predictions.pdf')
     plt.show()
     plt.close()
+
+    baseline = DummyRegressor(strategy='mean').fit(Xtrain,ytrain)
+    y_baseline = baseline.predict(Xtest)
+    
+    MSE1 = mean_squared_error(ytest, preds1)
+    print(f'Mean square error for kNN with Gaussian Kernel = {MSE1}')
+
+    MSE2 = mean_squared_error(ytest, preds2)
+    print(f'Mean square error for kernalised Ridge = {MSE2}')
+
+    MSEDummy = mean_squared_error(ytest, y_baseline)
+    print(f'Mean square error for kernalised Ridge = {MSEDummy}')
 
 
     
