@@ -62,7 +62,8 @@ else:
 	plt.title('model loss')
 	plt.ylabel('loss'); plt.xlabel('epoch')
 	plt.legend(['train', 'val'], loc='upper left')
-	plt.show()
+	plt.savefig('./fig1.pdf')
+	# plt.show()
 
 preds = model.predict(x_train)
 y_pred = np.argmax(preds, axis=1)
