@@ -11,13 +11,15 @@ plt.rc('font', size=18)
 plt.rcParams['figure.constrained_layout.use'] = True
 import sys
 
+print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+
 # Model / data parameters
 num_classes = 10
 input_shape = (32, 32, 3)
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
-n=5000
+n=10000
 x_train = x_train[1:n]; y_train=y_train[1:n]
 #x_test=x_test[1:500]; y_test=y_test[1:500]
 
@@ -62,7 +64,7 @@ else:
 	plt.title('model loss')
 	plt.ylabel('loss'); plt.xlabel('epoch')
 	plt.legend(['train', 'val'], loc='upper left')
-	plt.savefig('./fig1.pdf')
+	plt.savefig(f'./fig_{n}.pdf')
 	# plt.show()
 
 preds = model.predict(x_train)
