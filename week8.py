@@ -19,7 +19,7 @@ input_shape = (32, 32, 3)
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
-n=20000
+n=40000
 x_train = x_train[1:n]; y_train=y_train[1:n]
 #x_test=x_test[1:500]; y_test=y_test[1:500]
 
