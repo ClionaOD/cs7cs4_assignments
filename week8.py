@@ -11,11 +11,10 @@ plt.rc('font', size=18)
 plt.rcParams['figure.constrained_layout.use'] = True
 import sys
 
-print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
-
 # Model / data parameters
 num_classes = 10
 input_shape = (32, 32, 3)
+l1 = 0.01
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
@@ -43,7 +42,7 @@ else:
 	model.add(Conv2D(32, (3,3), strides=(2,2), padding='same', activation='relu'))
 	model.add(Dropout(0.5))
 	model.add(Flatten())
-	model.add(Dense(num_classes, activation='softmax',kernel_regularizer=regularizers.l1(0.0001)))
+	model.add(Dense(num_classes, activation='softmax',kernel_regularizer=regularizers.l1(l1)))
 	model.compile(loss="categorical_crossentropy", optimizer='adam', metrics=["accuracy"])
 	model.summary()
 
