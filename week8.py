@@ -14,7 +14,7 @@ import sys
 # Model / data parameters
 num_classes = 10
 input_shape = (32, 32, 3)
-l1 = 0.01
+l1 = 0.0
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
@@ -63,7 +63,7 @@ else:
 	plt.title('model loss')
 	plt.ylabel('loss'); plt.xlabel('epoch')
 	plt.legend(['train', 'val'], loc='upper left')
-	plt.savefig(f'./fig_{n}.pdf')
+	plt.savefig(f'./fig_{n}_{l1}.pdf')
 	# plt.show()
 
 preds = model.predict(x_train)
