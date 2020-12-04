@@ -14,7 +14,7 @@ import sys
 # Model / data parameters
 num_classes = 10
 input_shape = (32, 32, 3)
-l1 = 0.0
+l1 = 0.00001
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
