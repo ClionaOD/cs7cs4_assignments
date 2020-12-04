@@ -65,7 +65,7 @@ else:
 	plt.title('model loss')
 	plt.ylabel('loss'); plt.xlabel('epoch')
 	plt.legend(['train', 'val'], loc='upper left')
-	plt.savefig(f'./fig_{n}_{l1}.pdf')
+	plt.savefig(f'./fig_{n}_maxpool.pdf')
 	# plt.show()
 
 preds = model.predict(x_train)
