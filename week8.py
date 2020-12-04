@@ -38,6 +38,7 @@ if use_saved_model:
 	model = keras.models.load_model("cifar.model")
 elif use_baseline:
 	model = DummyClassifier(strategy='most_frequent')
+	model.fit(x_train,y_train)
 else:
 	model = keras.Sequential()
 	model.add(Conv2D(16, (3,3), padding='same', input_shape=x_train.shape[1:],activation='relu'))
