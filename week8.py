@@ -6,6 +6,7 @@ from keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from keras.layers import Conv2D, MaxPooling2D, LeakyReLU
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.utils import shuffle
+from sklearn.dummy import DummyClassifier
 import matplotlib.pyplot as plt
 plt.rc('font', size=18)
 plt.rcParams['figure.constrained_layout.use'] = True
@@ -36,7 +37,7 @@ use_baseline = True
 if use_saved_model:
 	model = keras.models.load_model("cifar.model")
 elif use_baseline:
-	model = tf.estimator.BaselineClassifier(n_classes=num_classes)
+	model = DummyClassifier(strategy='most_frequent')
 else:
 	model = keras.Sequential()
 	model.add(Conv2D(16, (3,3), padding='same', input_shape=x_train.shape[1:],activation='relu'))
