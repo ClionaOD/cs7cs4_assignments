@@ -32,8 +32,11 @@ y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
 use_saved_model = False
+use_baseline = True
 if use_saved_model:
 	model = keras.models.load_model("cifar.model")
+elif use_baseline:
+	model = tf.estimator.BaselineClassifier(n_classes=num_classes)
 else:
 	model = keras.Sequential()
 	model.add(Conv2D(16, (3,3), padding='same', input_shape=x_train.shape[1:],activation='relu'))
