@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-#SBATCH --output=/home/clionaodoherty/cs7cs4_assignments/5K_0.1.out
-#SBATCH --error=/home/clionaodoherty/cs7cs4_assignments/5K_0.1.err
+#SBATCH --output=/home/clionaodoherty/cs7cs4_assignments/5K_maxpool.out
+#SBATCH --error=/home/clionaodoherty/cs7cs4_assignments/5K_maxpool.err
 #SBATCH --gres=gpu:4
 #SBATCH --cpus-per-task=12
 

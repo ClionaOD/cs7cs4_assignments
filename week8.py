@@ -14,7 +14,7 @@ import sys
 # Model / data parameters
 num_classes = 10
 input_shape = (32, 32, 3)
-l1 = 0.1
+l1 = 0.0001
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
@@ -37,9 +37,11 @@ if use_saved_model:
 else:
 	model = keras.Sequential()
 	model.add(Conv2D(16, (3,3), padding='same', input_shape=x_train.shape[1:],activation='relu'))
-	model.add(Conv2D(16, (3,3), strides=(2,2), padding='same', activation='relu'))
+	#model.add(Conv2D(16, (3,3), strides=(2,2), padding='same', activation='relu'))
+	model.add(MaxPooling2D(pool_size=(2,2)))
 	model.add(Conv2D(32, (3,3), padding='same', activation='relu'))
-	model.add(Conv2D(32, (3,3), strides=(2,2), padding='same', activation='relu'))
+	#model.add(Conv2D(32, (3,3), strides=(2,2), padding='same', activation='relu'))
+	model.add(MaxPooling2D(pool_size=(2,2)))
 	model.add(Dropout(0.5))
 	model.add(Flatten())
 	model.add(Dense(num_classes, activation='softmax',kernel_regularizer=regularizers.l1(l1)))
