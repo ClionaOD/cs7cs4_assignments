@@ -14,6 +14,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from googletrans import Translator
+from nltk.classify import TextCat
+
+import nltk
+nltk.download('crubadan')
 
 # load the data, construct features
 X = [] ; y = [] ; z = []
@@ -31,11 +35,33 @@ df['voted_up'] = pd.Series(y)
 df['early_access'] = pd.Series(z)
 
 # translate non-english reviews
-translator = Translator()
-X_trans = translator.translate(X)
-X_trans = [x.text for x in X_trans]
+X_same = {}
+X_trans = {}
+for idx, text in enumerate(X):
+    lang = TextCat().guess_language(text)
+    if lang == 'eng':
+        X_same[idx] = text
+    else:
+        X_trans[idx] = text
 
-df['text_translate'] = pd.Series(X_trans)
+trans_df = pd.DataFrame.from_dict([X_trans])
+
+translator = Translator()
+translations = translator.translate(list(trans_df[0,:].values))
+translations = [translation.text for translation in translations]
+
+trans_df.loc[1,:] = translations
+X_trans = {k:v[1] for k,v in trans_df.to_dict().items()}
+
+for idx, text_dict in translations.items():
+    
+
+for k,v in X_same.items():
+    df.loc[k,'text_translate'] = v
+for k,v in X_trans.items():
+    df.loc[k,'text_translate'] = v
 
 #save the data and translations
 df.to_csv('./dataset_translated_df.csv')
+
+#df = pd.read_csv('./dataset_translated_df.csv', index_col=0)
