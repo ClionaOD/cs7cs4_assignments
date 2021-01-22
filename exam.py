@@ -1,3 +1,4 @@
+from numpy.core.numeric import cross
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -124,7 +125,7 @@ def CV_kNN(X, y, iter_list, prediction_class='voted_up'):
         cv_df.loc['mean f1',i] = mean_f1
         cv_df.loc['variance',i] = std
 
-    cv_df.to_csv('./kNN results.csv')
+    cv_df.to_csv(f'./kNN results_{prediction_class}.csv')
 
     fig, ax = plt.subplots()
     ax.errorbar(np.array(cv_df.columns), np.array(cv_df.loc['mean f1']), yerr=cv_df.loc['variance'])
@@ -206,41 +207,56 @@ def run_modelling(data_path, prediction_class='voted_up', translated=False, cros
     # i. construct features
     X_train, X_test, y_train, y_test = construct_features(data_path, prediction_class=prediction_class)
 
-    # ii. Logistic regression
-    #  Cross Validate C
-    # a. choose wide range to deterimine appropriate range
+    # ii. Cross validation
     if cross_val:
+        #  Cross Validate C
+        # a. choose wide range to deterimine appropriate range
         c_range = np.geomspace(0.0001,10, 10)
-        cross_val_C(X_train.values, y_train.values, c_range, range_size='wide')
+        cross_val_C(X_train.values, y_train.values, c_range, range_size='wide', prediction_class=prediction_class)
 
         # b. narrow range to find optimal value based on i
-        c_range = [0.01, 0.1, 0.5, 1.0, 1.5]
-        cross_val_C(X_train.values, y_train.values, c_range, range_size='narrow')
-
-    # c. run the logistic regression model - C term = 0.01 from CV results
-    log_reg_model = run_logistic(X_train, X_test, y_train, y_test, c_param=1.0)
-
-    # iii. kNN Classifier
-    # a. cross val for K
-    if cross_val:
+        c_range = [1,2,4,6,12]
+        cross_val_C(X_train.values, y_train.values, c_range, range_size='narrow', prediction_class=prediction_class)
+        
+        #   Cross Validate K
+        #  c. choose number of neighbours
         k_range = [2,6,10,12,15]
-        CV_kNN(X_train.values, y_train.values, k_range)
+        CV_kNN(X_train.values, y_train.values, k_range, prediction_class=prediction_class)
+    else:
+        # iii. Run modelling
+        # Logistic regression
+        if prediction_class == 'voted_up':
+            C = 1.0
+        elif prediction_class == 'early_access':
+            C = 10.0
+        else:
+            C = 1.0
+        
+        log_reg_model = run_logistic(X_train, X_test, y_train, y_test, c_param=C)
 
-    # b. run the kNN model, set n_neighbours (k) = from CV results
-    knn_model = run_knn(X_train, X_test, y_train, y_test, k=14)
+        # kNN Classifier
+        if prediction_class == 'voted_up':
+            K = 14
+        elif prediction_class == 'early_access':
+            K = 2
+        else:
+            K = 5
+        
+        knn_model = run_knn(X_train, X_test, y_train, y_test, k=K)
 
-    # iv. Dummy Classifier
-    dummy_clf = run_dummy(X_train, X_test, y_train, y_test)
+        # Dummy Classifier
+        dummy_clf = run_dummy(X_train, X_test, y_train, y_test)
 
-    #Compare performance - ROC curve
-    plot_roc_models(X_test, y_test, log_reg_model, knn_model, dummy_clf)
+        # iv. Compare performance - ROC curve
+        plot_roc_models(X_test, y_test, log_reg_model, knn_model, dummy_clf, prediction_class=prediction_class)
 
 if __name__ == "__main__":
     data_path = './dataset_translated_df.csv'
     
+    #run first with cross_val=True, then False once hyperparams have been found
     run_modelling(data_path, prediction_class='voted_up', cross_val=False)
 
-    #run_modelling(data_path, prediction_class='early_access', cross_val=True)
+    run_modelling(data_path, prediction_class='early_access', cross_val=False)
 
 
 
