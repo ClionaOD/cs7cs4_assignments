@@ -1,0 +1,44 @@
+Logistic Regression (C=1.0)
+[[361 166]
+ [119 354]]
+
+              precision    recall  f1-score   support
+
+       False       0.75      0.69      0.72       527
+        True       0.68      0.75      0.71       473
+
+    accuracy                           0.71      1000
+   macro avg       0.72      0.72      0.71      1000
+weighted avg       0.72      0.71      0.72      1000
+
+AUC = 0.7961435546052288
+
+kNN (k=14)
+[[329 198]
+ [151 322]]
+
+              precision    recall  f1-score   support
+
+       False       0.69      0.62      0.65       527
+        True       0.62      0.68      0.65       473
+
+    accuracy                           0.65      1000
+   macro avg       0.65      0.65      0.65      1000
+weighted avg       0.65      0.65      0.65      1000
+
+AUC = 0.736234860854251
+
+Dummy (most_frequent)
+[[  0 527]
+ [  0 473]]
+               precision    recall  f1-score   support
+
+       False       0.00      0.00      0.00       527
+        True       0.47      1.00      0.64       473
+
+    accuracy                           0.47      1000
+   macro avg       0.24      0.50      0.32      1000
+weighted avg       0.22      0.47      0.30      1000
+
+AUC = 0.5
+
