@@ -257,11 +257,3 @@ if __name__ == "__main__":
     run_modelling(data_path, prediction_class='voted_up', cross_val=False)
 
     run_modelling(data_path, prediction_class='early_access', cross_val=False)
-
-
-
-
-
-
-
-

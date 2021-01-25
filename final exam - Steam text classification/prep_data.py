@@ -53,9 +53,6 @@ translations = [translation.text for translation in translations]
 trans_df.loc[1,:] = translations
 X_trans = {k:v[1] for k,v in trans_df.to_dict().items()}
 
-for idx, text_dict in translations.items():
-    
-
 for k,v in X_same.items():
     df.loc[k,'text_translate'] = v
 for k,v in X_trans.items():
@@ -63,5 +60,3 @@ for k,v in X_trans.items():
 
 #save the data and translations
 df.to_csv('./dataset_translated_df.csv')
-
-#df = pd.read_csv('./dataset_translated_df.csv', index_col=0)
